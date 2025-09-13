@@ -1,0 +1,15 @@
+# .gitignore
+# SwiftPM
+Shared/.build/
+Shared/.swiftpm/
+
+# Xcode（Macで作られるもの）
+iOS/DerivedData/
+iOS/*.xcworkspace/
+iOS/xcuserdata/
+iOS/*.xcodeproj/project.xcworkspace/
+iOS/*.xcodeproj/xcuserdata/
+
+# OS
+.DS_Store
+Thumbs.db
