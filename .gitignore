@@ -1,7 +1,8 @@
 # .gitignore
 # SwiftPM
-Shared/.build/
-Shared/.swiftpm/
+.build/
+.swiftpm/xcode/
+DerivedData/
 
 # Xcode（Macで作られるもの）
 iOS/DerivedData/
