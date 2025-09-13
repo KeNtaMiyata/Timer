@@ -1,0 +1,40 @@
+{
+    "configurations": [
+        {
+            "type": "swift",
+            "request": "launch",
+            "args": [],
+            "cwd": "${workspaceFolder:Timer}/Shared",
+            "name": "Debug TimerCore (Shared)",
+            "program": "${workspaceFolder:Timer}/Shared/.build/debug/TimerCore",
+            "preLaunchTask": "swift: Build Debug TimerCore (Shared)"
+        },
+        {
+            "type": "swift",
+            "request": "launch",
+            "args": [],
+            "cwd": "${workspaceFolder:Timer}/Shared",
+            "name": "Release TimerCore (Shared)",
+            "program": "${workspaceFolder:Timer}/Shared/.build/release/TimerCore",
+            "preLaunchTask": "swift: Build Release TimerCore (Shared)"
+        },
+        {
+            "type": "swift",
+            "request": "launch",
+            "args": [],
+            "cwd": "${workspaceFolder:Timer}/Shared",
+            "name": "Debug TimerCLI (Shared)",
+            "program": "${workspaceFolder:Timer}/Shared/.build/debug/TimerCLI",
+            "preLaunchTask": "swift: Build Debug TimerCLI (Shared)"
+        },
+        {
+            "type": "swift",
+            "request": "launch",
+            "args": [],
+            "cwd": "${workspaceFolder:Timer}/Shared",
+            "name": "Release TimerCLI (Shared)",
+            "program": "${workspaceFolder:Timer}/Shared/.build/release/TimerCLI",
+            "preLaunchTask": "swift: Build Release TimerCLI (Shared)"
+        }
+    ]
+}

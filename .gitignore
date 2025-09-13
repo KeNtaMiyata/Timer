@@ -12,4 +12,4 @@ iOS/*.xcodeproj/xcuserdata/
 
 # OS
 .DS_Store
-Thumbs.db
+Thumbs.db-e "\n.build/\n.swiftpm/xcode/\nDerivedData/\n" 
