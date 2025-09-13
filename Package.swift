@@ -5,14 +5,13 @@
 import PackageDescription
 
 let package = Package(
-    name: "shared",
+    name: "Timer",
+    platforms: [.iOS(.v16)],
     products: [
-        .library(name: "TimerCore", targets: ["TimerCore"]),
-        .executable(name: "TimerCLI", targets: ["TimerCLI"]),
+        .library(name: "TimerCore", targets: ["TimerCore"])
     ],
     targets: [
         .target(name: "TimerCore"),
-        .executableTarget(name: "TimerCLI", dependencies: ["TimerCore"]),
-        .testTarget(name: "TimerCoreTests", dependencies: ["TimerCore"]),
+        .testTarget(name: "TimerCoreTests", dependencies: ["TimerCore"])
     ]
 )
