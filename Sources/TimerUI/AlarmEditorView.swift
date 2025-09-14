@@ -28,40 +28,42 @@ public struct AlarmEditorView: View {
                         .onChange(of: repeatsDaily) { _, newValue in
                             if newValue { selectedWeekdays.removeAll() }
                         }
-                    WeekdayPicker(selected: $selectedWeekdays)   // ← Binding<Set<Weekday>>
+                    WeekdayPicker(selected: $selectedWeekdays)
                         .disabled(repeatsDaily)
                 }
             }
-            // AlarmEditorView.swift（TimerUI）
             .navigationTitle("アラーム追加")
-            .toolbar {
-                ToolbarItem(placement: .navigationBarTrailing) {
-                    Button("保存") {
-                        let alarm = Alarm(
-                            time: time,
-                            title: title.isEmpty ? "アラーム" : title,
-                            repeatsDaily: repeatsDaily && selectedWeekdays.isEmpty,
-                            weekdays: selectedWeekdays
-                        )
-                        onSave(alarm)
-                        dismiss()
-                    }
-                }
-                ToolbarItem(placement: .navigationBarLeading) {
-                    Button("キャンセル") { dismiss() }
-                }
+            .toolbar { editorToolbar }   // ← 曖昧さを消すために ToolbarContent を明示
+        }
+    }
+
+    // MARK: - Toolbar (明示的に ToolbarContentBuilder を使う)
+    @ToolbarContentBuilder
+    private var editorToolbar: some ToolbarContent {
+        // iOS 16 互換の placement を使用
+        ToolbarItem(placement: .navigationBarTrailing) {
+            Button("保存") {
+                let alarm = Alarm(
+                    time: time,
+                    title: title.isEmpty ? "アラーム" : title,
+                    repeatsDaily: repeatsDaily && selectedWeekdays.isEmpty,
+                    weekdays: selectedWeekdays
+                )
+                onSave(alarm)
+                dismiss()
             }
-
-
+        }
+        ToolbarItem(placement: .navigationBarLeading) {
+            Button("キャンセル") { dismiss() }
         }
     }
 }
 
+// MARK: - WeekdayPicker
 private struct WeekdayPicker: View {
     @Binding var selected: Set<Weekday>
 
     var body: some View {
-        // Set は ForEach に直接渡さず、配列にして id: \.self を付ける
         let days = Weekday.allCases.sorted()
         let columns = [GridItem(.adaptive(minimum: 44))]
 
