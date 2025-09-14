@@ -86,3 +86,22 @@ private struct WeekdayPicker: View {
     }
 }
 #endif
+
+@ToolbarContentBuilder
+private var editorToolbar: some ToolbarContent {
+    ToolbarItem(placement: .navigationBarTrailing) {
+        Button("保存") {
+            let alarm = Alarm(
+                time: time,
+                title: title.isEmpty ? "アラーム" : title,
+                repeatsDaily: repeatsDaily && selectedWeekdays.isEmpty,
+                weekdays: selectedWeekdays
+            )
+            onSave(alarm)
+            dismiss()
+        }
+    }
+    ToolbarItem(placement: .navigationBarLeading) {
+        Button("キャンセル") { dismiss() }
+    }
+}
