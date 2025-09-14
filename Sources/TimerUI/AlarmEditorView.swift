@@ -32,9 +32,10 @@ public struct AlarmEditorView: View {
                         .disabled(repeatsDaily)
                 }
             }
+            // AlarmEditorView.swift（TimerUI）
             .navigationTitle("アラーム追加")
             .toolbar {
-                ToolbarItemGroup(placement: .confirmationAction) {
+                ToolbarItem(placement: .navigationBarTrailing) {
                     Button("保存") {
                         let alarm = Alarm(
                             time: time,
@@ -46,10 +47,11 @@ public struct AlarmEditorView: View {
                         dismiss()
                     }
                 }
-                ToolbarItemGroup(placement: .cancellationAction) {
+                ToolbarItem(placement: .navigationBarLeading) {
                     Button("キャンセル") { dismiss() }
                 }
             }
+
 
         }
     }
