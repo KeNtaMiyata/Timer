@@ -1,16 +1,16 @@
- 
 #if canImport(SwiftUI)
 import SwiftUI
 import TimerCore
 
 public struct AlarmEditorView: View {
     @Environment(\.dismiss) private var dismiss
-    @State var time: Date = Calendar.current.date(bySettingHour: 7, minute: 0, second: 0, of: Date())!
-    @State var title: String = "朝のアラーム"
-    @State var repeatsDaily: Bool = true
-    @State var selectedWeekdays: Set<Weekday> = []
 
-    let onSave: (Alarm) -> Void
+    @State private var time: Date = Calendar.current.date(bySettingHour: 7, minute: 0, second: 0, of: Date())!
+    @State private var title: String = "朝のアラーム"
+    @State private var repeatsDaily: Bool = true
+    @State private var selectedWeekdays: Set<Weekday> = []
+
+    public let onSave: (Alarm) -> Void
 
     public init(onSave: @escaping (Alarm) -> Void) {
         self.onSave = onSave
@@ -28,7 +28,7 @@ public struct AlarmEditorView: View {
                         .onChange(of: repeatsDaily) { _, newValue in
                             if newValue { selectedWeekdays.removeAll() }
                         }
-                    WeekdayPicker(selected: $selectedWeekdays)
+                    WeekdayPicker(selected: $selectedWeekdays)   // ← Binding<Set<Weekday>>
                         .disabled(repeatsDaily)
                 }
             }
@@ -36,10 +36,12 @@ public struct AlarmEditorView: View {
             .toolbar {
                 ToolbarItem(placement: .confirmationAction) {
                     Button("保存") {
-                        let alarm = Alarm(time: time,
-                                          title: title.isEmpty ? "アラーム" : title,
-                                          repeatsDaily: repeatsDaily && selectedWeekdays.isEmpty,
-                                          weekdays: selectedWeekdays)
+                        let alarm = Alarm(
+                            time: time,
+                            title: title.isEmpty ? "アラーム" : title,
+                            repeatsDaily: repeatsDaily && selectedWeekdays.isEmpty,
+                            weekdays: selectedWeekdays
+                        )
                         onSave(alarm)
                         dismiss()
                     }
@@ -56,9 +58,12 @@ private struct WeekdayPicker: View {
     @Binding var selected: Set<Weekday>
 
     var body: some View {
+        // Set は ForEach に直接渡さず、配列にして id: \.self を付ける
+        let days = Weekday.allCases.sorted()
         let columns = [GridItem(.adaptive(minimum: 44))]
+
         LazyVGrid(columns: columns, spacing: 8) {
-            ForEach(Weekday.allCases, id: \.self) { wd in
+            ForEach(days, id: \.self) { wd in
                 let isOn = selected.contains(wd)
                 Text(wd.shortJP)
                     .font(.headline)
@@ -66,7 +71,9 @@ private struct WeekdayPicker: View {
                     .background(isOn ? Color.orange.opacity(0.85) : Color.secondary.opacity(0.15))
                     .foregroundStyle(isOn ? .white : .primary)
                     .clipShape(RoundedRectangle(cornerRadius: 12))
-                    .onTapGesture { isOn ? selected.remove(wd) : selected.insert(wd) }
+                    .onTapGesture {
+                        if isOn { selected.remove(wd) } else { selected.insert(wd) }
+                    }
                     .animation(.spring(duration: 0.2), value: isOn)
             }
         }
