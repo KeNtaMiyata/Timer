@@ -34,7 +34,7 @@ public struct AlarmEditorView: View {
             }
             .navigationTitle("アラーム追加")
             .toolbar {
-                ToolbarItem(placement: .confirmationAction) {
+                ToolbarItemGroup(placement: .confirmationAction) {
                     Button("保存") {
                         let alarm = Alarm(
                             time: time,
@@ -46,10 +46,11 @@ public struct AlarmEditorView: View {
                         dismiss()
                     }
                 }
-                ToolbarItem(placement: .cancellationAction) {
+                ToolbarItemGroup(placement: .cancellationAction) {
                     Button("キャンセル") { dismiss() }
                 }
             }
+
         }
     }
 }
