@@ -11,7 +11,7 @@ public enum AlarmCategoryID {
 }
 
 @MainActor
-public final class AlarmScheduler: @unchecked Sendable {
+public final class AlarmScheduler {
     public static let shared = AlarmScheduler()
     private let center = UNUserNotificationCenter.current()
     private init() {}
@@ -30,14 +30,22 @@ public final class AlarmScheduler: @unchecked Sendable {
         try await center.requestAuthorization(options: [.alert, .sound, .badge])
     }
 
-    public func schedule(dateComponents: DateComponents, repeats: Bool, id: String, title: String, body: String) async throws {
+    public func schedule(dateComponents: DateComponents,
+                         repeats: Bool,
+                         id: String,
+                         title: String,
+                         body: String) async throws {
         let content = UNMutableNotificationContent()
         content.title = title
         content.body = body
         content.sound = .default
         content.categoryIdentifier = AlarmCategoryID.alarm
+
         let trigger = UNCalendarNotificationTrigger(dateMatching: dateComponents, repeats: repeats)
-        try await center.add(UNNotificationRequest(identifier: id, content: content, trigger: trigger))
+        let req = UNNotificationRequest(identifier: id, content: content, trigger: trigger)
+
+        // iOS 16+ は async/throws 版があるのでそれを利用
+        try await center.add(req)
     }
 
     public func scheduleSnooze(originalID: String, minutes: Int, title: String) {
@@ -46,8 +54,12 @@ public final class AlarmScheduler: @unchecked Sendable {
         content.body  = "\(minutes)分後に再通知します"
         content.sound = .default
         content.categoryIdentifier = AlarmCategoryID.alarm
+
         let trig = UNTimeIntervalNotificationTrigger(timeInterval: TimeInterval(minutes * 60), repeats: false)
-        center.add(UNNotificationRequest(identifier: originalID + "_SNOOZE", content: content, trigger: trig))
+        let req  = UNNotificationRequest(identifier: originalID + "_SNOOZE", content: content, trigger: trig)
+
+        // こちらは await 不要の add でもOK（MainActor 上）
+        center.add(req)
     }
 
     public func cancel(ids: [String]) {
