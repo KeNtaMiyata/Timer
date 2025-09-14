@@ -9,9 +9,8 @@ public enum AlarmCategoryID {
     public static let alarm = "ALARM_CATEGORY"
 }
 
-/// UI/通知相当はメインスレッド想定なので MainActor に載せる
 @MainActor
-public final class AlarmScheduler: @unchecked Sendable {
+public final class AlarmScheduler {
     public static let shared = AlarmScheduler()
     private init() {}
 
