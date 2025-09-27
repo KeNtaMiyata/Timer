@@ -33,7 +33,8 @@ public struct AlarmEditorView: View {
                 }
             }
             .navigationTitle("アラーム追加")
-            .toolbar { editorToolbar }   // ← 曖昧さを消すために ToolbarContent を明示
+            .toolbar(content: { editorToolbar })
+
         }
     }
 
