@@ -78,4 +78,31 @@ public struct AlarmEditorView: View {
         }
     }
 }
+
+// MARK: - WeekdayPicker
+private struct WeekdayPicker: View {
+    @Binding var selected: Set<Weekday>
+
+    var body: some View {
+        let days = Weekday.allCases.sorted()
+        let columns = [GridItem(.adaptive(minimum: 44))]
+
+        LazyVGrid(columns: columns, spacing: 8) {
+            ForEach(days, id: \.self) { wd in
+                let isOn = selected.contains(wd)
+                Text(wd.shortJP)
+                    .font(.headline)
+                    .frame(width: 44, height: 44)
+                    .background(isOn ? Color.orange.opacity(0.85) : Color.secondary.opacity(0.15))
+                    .foregroundStyle(isOn ? .white : .primary)
+                    .clipShape(RoundedRectangle(cornerRadius: 12))
+                    .onTapGesture {
+                        if isOn { selected.remove(wd) } else { selected.insert(wd) }
+                    }
+                    .animation(.spring(duration: 0.2), value: isOn)
+            }
+        }
+        .padding(.vertical, 4)
+    }
+}
 #endif
