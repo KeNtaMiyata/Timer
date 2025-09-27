@@ -33,31 +33,28 @@ public struct AlarmEditorView: View {
                 }
             }
             .navigationTitle("アラーム追加")
-            .toolbar(content: { editorToolbar })
-
-        }
-    }
-
-    // MARK: - Toolbar (明示的に ToolbarContentBuilder を使う)
-    @ToolbarContentBuilder
-    private var editorToolbar: some ToolbarContent {
-        // iOS 16 互換の placement を使用
-        ToolbarItem(placement: .navigationBarTrailing) {
-            Button("保存") {
-                let alarm = Alarm(
-                    time: time,
-                    title: title.isEmpty ? "アラーム" : title,
-                    repeatsDaily: repeatsDaily && selectedWeekdays.isEmpty,
-                    weekdays: selectedWeekdays
-                )
-                onSave(alarm)
-                dismiss()
+            .toolbar {
+                ToolbarItem(placement: .cancellationAction) {
+                    Button("キャンセル") { dismiss() }
+                }
+                ToolbarItem(placement: .confirmationAction) {
+                    Button("保存") {
+                        let alarm = Alarm(
+                            time: time,
+                            title: title.isEmpty ? "アラーム" : title,
+                            repeatsDaily: repeatsDaily && selectedWeekdays.isEmpty,
+                            weekdays: selectedWeekdays
+                        )
+                        onSave(alarm)
+                        dismiss()
+                    }
+                }
             }
-        }
-        ToolbarItem(placement: .navigationBarLeading) {
-            Button("キャンセル") { dismiss() }
+
         }
     }
+
+    
 }
 
 // MARK: - WeekdayPicker
